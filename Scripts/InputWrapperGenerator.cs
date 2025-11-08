@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using CookieUtils;
 using UnityEditor;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 
 namespace Cookie.InputWrapper
 {
@@ -133,6 +135,7 @@ public static class @{actions.className}
 
         private static string GetActionMapDefinitions(InputActionAsset asset, string generatedClass) {
             StringBuilder sb = new();
+
             foreach (InputActionMap map in asset.actionMaps) {
                 string formattedMapName = ToPascalCase(map.name);
                 sb.AppendLine($"\n    #region {map.name}");
@@ -144,12 +147,14 @@ public static class @{actions.className}
 
                 foreach (InputAction action in map.actions) {
                     string formattedActionName = ToPascalCase(action.name);
+                    string variableName = GetDistinctName(action, map, asset.actionMaps);
+
                     sb.AppendLine(
                         $@"
     /// <summary>
     ///     The '{action.name}' action from the '{map.name}' input map
     /// </summary>
-    public static InputAction @{formattedActionName} => {formattedMapName}.{formattedActionName};"
+    public static InputAction @{variableName} => {formattedMapName}.{formattedActionName};"
                     );
                 }
 
@@ -157,6 +162,17 @@ public static class @{actions.className}
             }
 
             return sb.ToString();
+        }
+
+        private static string GetDistinctName(
+            InputAction action,
+            InputActionMap map,
+            ReadOnlyArray<InputActionMap> assetActionMaps
+        ) {
+            IEnumerable<InputAction> otherActions = assetActionMaps.SelectMany(m => m.actions.Where(a => a != action));
+            bool hasSame = otherActions.Select(a => a.name).Contains(action.name);
+
+            return hasSame ? $"{map.name}_{action.name}" : action.name;
         }
 
         private static string ToPascalCase(string str) {
