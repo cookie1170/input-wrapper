@@ -11,6 +11,6 @@ Generates static wrappers for strong-referencing input actions from Unity's Inpu
 3. Create an input actions asset with 'Generate C# Class' enabled
 4. Add it to the list in the project settings
     1. Class Name - The name for the wrapper class
-    2. Generated C Sharp Class Name - The name for the C# class generated from the input actions asset
-    3. Generated C Sharp Class Namespace - The namespace for the C# class generated from the input actions asset
+    2. Generated Name - The name for the C# class generated from the input actions asset
+    3. Generated Namespace - The namespace for the C# class generated from the input actions asset
     4. Asset - The input actions asset itself
