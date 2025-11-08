@@ -1,0 +1,14 @@
+{
+  "name": "com.cookie.input-wrapper",
+  "version": "0.0.1",
+  "displayName": "Input Wrapper",
+  "description": "A wrapper using Roslyn source generation for input actions",
+  "unity": "6000.2",
+  "dependencies": {
+    "com.unity.inputsystem": "^1.14.2"
+  },
+  "author": {
+    "name": "Cookie",
+    "url": "https://github.com/cookie1170/"
+  }
+}
