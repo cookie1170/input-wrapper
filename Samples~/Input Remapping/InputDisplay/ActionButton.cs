@@ -1,4 +1,5 @@
 using System.Collections;
+using Cookie.InputHelper;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,21 +15,23 @@ public class ActionButton : ActionDisplay
     private float _colourVel;
     private Coroutine _currentScale;
     private float _scaleProgress = 0;
+    private InputActionReference Action => actions[0];
 
     private void Update() {
-        float target = action.action.IsPressed() ? 1 : 0;
+        float target = Action.action.IsPressed() ? 1 : 0;
         _colourProgress = Mathf.SmoothDamp(_colourProgress, target, ref _colourVel, fadeDuration);
         text.color = Color.Lerp(Color.white, pressedColour, _colourProgress);
     }
 
     protected override void OnEnable() {
         base.OnEnable();
-        action.action.performed += OnActionPerformed;
+        Action.action.Enable();
+        Action.action.performed += OnActionPerformed;
     }
 
     protected override void OnDisable() {
         base.OnDisable();
-        action.action.performed -= OnActionPerformed;
+        Action.action.performed -= OnActionPerformed;
     }
 
 
