@@ -10,5 +10,12 @@
   "author": {
     "name": "Cookie",
     "url": "https://github.com/cookie1170/"
-  }
+  },
+  "samples": [
+    {
+      "displayName": "Input Remapping",
+      "description": "A sample showing the input remapping functionality",
+      "path": "Samples~/Input Remapping"
+    }
+  ]
 }

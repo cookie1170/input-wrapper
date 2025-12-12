@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
-namespace Cookie.InputWrapper
+namespace Cookie.InputHelper
 {
     internal class InputWrapperSettings : ScriptableObject
     {
@@ -17,7 +17,7 @@ namespace Cookie.InputWrapper
         private static readonly string[] Keywords = { "input", "actions", "wrapper" };
 
         [SerializeField] [Tooltip("The namespace for the wrapper classes. Leave empty for no namespace")]
-        internal string @namespace = "Cookie.InputWrapper";
+        internal string @namespace = "Cookie.InputHelper";
 
         [SerializeField]
         [Tooltip(

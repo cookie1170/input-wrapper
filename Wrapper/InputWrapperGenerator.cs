@@ -2,12 +2,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using CookieUtils;
 using UnityEditor;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-namespace Cookie.InputWrapper
+namespace Cookie.InputHelper
 {
     internal class InputWrapperGenerator
     {
@@ -43,7 +42,7 @@ namespace Cookie.InputWrapper
 using UnityEngine;
 using UnityEngine.InputSystem;"
             );
-            if (!actions.generatedNamespace.IsNullOrWhiteSpace())
+            if (!string.IsNullOrWhiteSpace(actions.generatedNamespace))
                 sb.AppendLine($"using {actions.generatedNamespace};");
             sb.AppendLine(
                 @"#if UNITY_EDITOR
@@ -54,7 +53,7 @@ using UnityEditor;
 
             string generatedClassPath = actions.generatedName;
 
-            if (!@namespace.IsNullOrWhiteSpace()) sb.Append($"namespace {@namespace} {{");
+            if (!string.IsNullOrWhiteSpace(@namespace)) sb.Append($"namespace {@namespace} {{");
 
             sb.Append(
                 $@"
@@ -111,7 +110,7 @@ public static class @{actions.className}
             );
 
             string result;
-            if (!@namespace.IsNullOrWhiteSpace()) {
+            if (!string.IsNullOrWhiteSpace(@namespace)) {
                 string noIndent = sb.ToString();
                 List<string> splitByLine = new(noIndent.Split('\n'));
                 StringBuilder indentBuilder = new();
@@ -169,7 +168,7 @@ public static class @{actions.className}
         ) {
             if (_settings.alwaysIncludeMap) return $"{map.name}_{action.name}";
 
-            IEnumerable<InputAction> otherActions = assetActionMaps.SelectMany(m => m.actions.Where(a => a != action));
+            var otherActions = assetActionMaps.SelectMany(m => m.actions.Where(a => a != action));
             bool hasSame = otherActions.Select(a => a.name).Contains(action.name);
 
             return hasSame ? $"{map.name}_{action.name}" : action.name;
