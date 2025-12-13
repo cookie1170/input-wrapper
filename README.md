@@ -1,6 +1,7 @@
 # input-helper
 
-Generates static wrappers for strong-referencing input actions from Unity's Input system, as well as provides a system for easily remapping inputs
+Generates static wrappers for strong-referencing input actions from Unity's Input system, as well as provides a system
+for easily remapping and displaying inputs
 
 # Input wrapper:
 
@@ -14,3 +15,17 @@ Generates static wrappers for strong-referencing input actions from Unity's Inpu
     2. Generated Name - The name for the C# class generated from the input actions asset
     3. Generated Namespace - The namespace for the C# class generated from the input actions asset
     4. Asset - The input actions asset itself
+
+# Input remapping:
+
+1. Add the `RebindingUI_Action` component to a game object
+2. Assign all the references in the inspector
+3. Assign the correct input action and label
+
+# Input display:
+
+1. Add the `ActionDisplay` component to a game object
+2. Assign the `TMP_Text` reference to the target text object
+3. Assign references to all the actions, in the same order as they are in the text
+4. Any {0}, {1}, (...) (the same as string.Format()) in the text are replaced with their corresponding action's key,
+   matching the user's keyboard layout
