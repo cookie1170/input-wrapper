@@ -7,21 +7,12 @@ public class ActionButton : ActionDisplay
 {
     [SerializeField] private float inDuration = 0.15f;
     [SerializeField] private float outDuration = 0.3f;
-    [SerializeField] private float fadeDuration = 0.25f;
     [SerializeField] private float scale = 1.2f;
-    [SerializeField] private Color pressedColour;
 
-    private float _colourProgress = 0;
     private float _colourVel;
     private Coroutine _currentScale;
     private float _scaleProgress = 0;
     private InputActionReference Action => actions[0];
-
-    private void Update() {
-        float target = Action.action.IsPressed() ? 1 : 0;
-        _colourProgress = Mathf.SmoothDamp(_colourProgress, target, ref _colourVel, fadeDuration);
-        text.color = Color.Lerp(Color.white, pressedColour, _colourProgress);
-    }
 
     protected override void OnEnable() {
         base.OnEnable();
@@ -58,7 +49,6 @@ public class ActionButton : ActionDisplay
 
         _scaleProgress = 0;
     }
-
 
     private void EaseScale(float progress) {
         transform.localScale = Vector3.Lerp(Vector3.one, Vector3.one * scale, Ease(progress));

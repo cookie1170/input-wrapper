@@ -10,7 +10,7 @@ public class SampleUI : MonoBehaviour
     private void Awake() {
         escapeAction.action.Enable();
         escapeAction.action.performed += OnEscape;
-        foreach (InputActionMap map in asset.actionMaps) InputUtils.LoadBinds(map);
+        InputUtils.LoadBinds(asset);
     }
 
     private void OnDestroy() {
