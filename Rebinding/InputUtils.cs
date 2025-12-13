@@ -21,7 +21,7 @@ namespace Cookie.InputHelper
         /// </summary>
         /// <remarks>
         ///     They're made to fit the input prompts by Xelu (https://thoseawesomeguys.com/prompts/)
-        ///     with any prefixes for keyboard (like Key_Dark) removed
+        ///     with suffixes for keyboard (like _Key_Dark, Q_Key_Dark -> Q) removed
         /// </remarks>
         private static readonly Dictionary<string, string> IconsLookup = new() {
             { "leftShift", "Shift" },
@@ -87,7 +87,8 @@ namespace Cookie.InputHelper
         /// <summary>
         ///     Gets a display string for the action using icons from input prompts by Xelu (https://thoseawesomeguys.com/prompts/)
         ///     <br />
-        ///     with any prefixes for keyboard (like Key_Dark) removed, from a sprite asset called 'ButtonIcons' for TextMeshPro
+        ///     with any suffixes for keyboard (like _Key_Dark, Q_Key_Dark.pn should be just Q.png) removed, from a sprite asset
+        ///     called 'ButtonIcons' for TextMeshPro
         ///     <br />
         ///     which should be under the path in your TextMeshPro project settings (by default "Resources/Sprite Assets")
         /// </summary>
