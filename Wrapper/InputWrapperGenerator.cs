@@ -15,13 +15,16 @@ namespace Cookie.InputHelper
         private InputWrapperGenerator(InputWrapperSettings settings) => _settings = settings;
 
         [MenuItem("Tools/Input Wrapper/Generate")]
-        private static void Generate() {
+        private static void Generate()
+        {
             InputWrapperSettings settings = InputWrapperSettings.GetInst();
             string folder = $"Assets/{settings.folder}";
 
-            if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+            if (!Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
 
-            foreach (InputWrapperSettings.ActionsAsset actions in settings.assets) {
+            foreach (InputWrapperSettings.ActionsAsset actions in settings.assets)
+            {
                 InputWrapperGenerator generator = new(settings);
                 string result = generator.GetCodeFor(actions);
                 string path = $"{folder}/{actions.className}__Generated.cs";
@@ -32,7 +35,8 @@ namespace Cookie.InputHelper
             AssetDatabase.Refresh();
         }
 
-        private string GetCodeFor(InputWrapperSettings.ActionsAsset actions) {
+        private string GetCodeFor(InputWrapperSettings.ActionsAsset actions)
+        {
             string @namespace = _settings.@namespace;
             InputActionAsset asset = actions.asset;
 
@@ -53,7 +57,8 @@ using UnityEditor;
 
             string generatedClassPath = actions.generatedName;
 
-            if (!string.IsNullOrWhiteSpace(@namespace)) sb.Append($"namespace {@namespace} {{");
+            if (!string.IsNullOrWhiteSpace(@namespace))
+                sb.Append($"namespace {@namespace} {{");
 
             sb.Append(
                 $@"
@@ -110,30 +115,37 @@ public static class @{actions.className}
             );
 
             string result;
-            if (!string.IsNullOrWhiteSpace(@namespace)) {
+            if (!string.IsNullOrWhiteSpace(@namespace))
+            {
                 string noIndent = sb.ToString();
                 List<string> splitByLine = new(noIndent.Split('\n'));
                 StringBuilder indentBuilder = new();
 
                 int namespaceIndex = splitByLine.FindIndex(s => s.StartsWith("namespace"));
-                for (int i = 0; i < splitByLine.Count; i++) {
-                    if (i > namespaceIndex) indentBuilder.Append("    ");
+                for (int i = 0; i < splitByLine.Count; i++)
+                {
+                    if (i > namespaceIndex)
+                        indentBuilder.Append("    ");
                     indentBuilder.AppendLine(splitByLine[i]);
                 }
 
                 indentBuilder.AppendLine("}");
                 result = indentBuilder.ToString();
-            } else {
+            }
+            else
+            {
                 result = sb.ToString();
             }
 
             return result;
         }
 
-        private string GetActionMapDefinitions(InputActionAsset asset, string generatedClass) {
+        private string GetActionMapDefinitions(InputActionAsset asset, string generatedClass)
+        {
             StringBuilder sb = new();
 
-            foreach (InputActionMap map in asset.actionMaps) {
+            foreach (InputActionMap map in asset.actionMaps)
+            {
                 string formattedMapName = ToPascalCase(map.name);
                 sb.AppendLine($"\n    #region {map.name}");
                 sb.AppendLine(
@@ -142,7 +154,8 @@ public static class @{actions.className}
     public static {generatedClass}.{formattedMapName}Actions @{formattedMapName} {{ get; }} = Inst.{formattedMapName};"
                 );
 
-                foreach (InputAction action in map.actions) {
+                foreach (InputAction action in map.actions)
+                {
                     string formattedActionName = ToPascalCase(action.name);
                     string variableName = GetDistinctName(action, map, asset.actionMaps);
 
@@ -165,8 +178,10 @@ public static class @{actions.className}
             InputAction action,
             InputActionMap map,
             ReadOnlyArray<InputActionMap> assetActionMaps
-        ) {
-            if (_settings.alwaysIncludeMap) return $"{map.name}_{action.name}";
+        )
+        {
+            if (_settings.alwaysIncludeMap)
+                return $"{map.name}_{action.name}";
 
             var otherActions = assetActionMaps.SelectMany(m => m.actions.Where(a => a != action));
             bool hasSame = otherActions.Select(a => a.name).Contains(action.name);
@@ -174,13 +189,17 @@ public static class @{actions.className}
             return hasSame ? $"{map.name}_{action.name}" : action.name;
         }
 
-        private static string ToPascalCase(string str) {
+        private static string ToPascalCase(string str)
+        {
             StringBuilder sb = new(str);
 
-            for (int i = sb.Length - 1; i >= 0; i--) {
+            for (int i = sb.Length - 1; i >= 0; i--)
+            {
                 char c = sb[i];
-                if (c == ' ') {
-                    if (i < sb.Length - 1) sb[i + 1] = char.ToUpper(sb[i + 1]);
+                if (c == ' ')
+                {
+                    if (i < sb.Length - 1)
+                        sb[i + 1] = char.ToUpper(sb[i + 1]);
                     sb.Remove(i, 1);
                 }
             }

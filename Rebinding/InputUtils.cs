@@ -23,7 +23,8 @@ namespace Cookie.InputHelper
         ///     They're made to fit the input prompts by Xelu (https://thoseawesomeguys.com/prompts/)
         ///     with suffixes for keyboard (like _Key_Dark, Q_Key_Dark -> Q) removed
         /// </remarks>
-        private static readonly Dictionary<string, string> IconsLookup = new() {
+        private static readonly Dictionary<string, string> IconsLookup = new()
+        {
             { "leftShift", "Shift" },
             { "rightShift", "Shift" },
             { "leftCtrl", "Ctrl" },
@@ -82,7 +83,8 @@ namespace Cookie.InputHelper
         };
 
         /// <inheritdoc cref="GetDisplay(InputAction, out int, out string, out string)" />
-        public static string GetDisplay(InputAction action) => GetDisplay(action, out _, out _, out _);
+        public static string GetDisplay(InputAction action) =>
+            GetDisplay(action, out _, out _, out _);
 
         /// <summary>
         ///     Gets a display string for the action using icons from input prompts by Xelu (https://thoseawesomeguys.com/prompts/)
@@ -105,21 +107,27 @@ namespace Cookie.InputHelper
             out int bindingIndex,
             out string deviceLayoutName,
             out string controlPath
-        ) {
+        )
+        {
             controlPath = null;
             deviceLayoutName = null;
             bindingIndex = -1;
 
             var bindings = action.bindings;
 
-            for (int i = 0; i < bindings.Count; i++) {
+            for (int i = 0; i < bindings.Count; i++)
+            {
                 bindingIndex = i;
 
                 string displayString = GetBindingDisplayString(
-                    action, bindingIndex, out deviceLayoutName, out controlPath
+                    action,
+                    bindingIndex,
+                    out deviceLayoutName,
+                    out controlPath
                 );
 
-                if (!string.IsNullOrEmpty(displayString)) return displayString;
+                if (!string.IsNullOrEmpty(displayString))
+                    return displayString;
             }
 
             return "Unbound";
@@ -131,24 +139,37 @@ namespace Cookie.InputHelper
             int bindingIndex,
             out string deviceLayoutName,
             out string controlPath
-        ) {
-            if (action.bindings[bindingIndex].isComposite) {
+        )
+        {
+            if (action.bindings[bindingIndex].isComposite)
+            {
                 List<string> strings = new();
 
                 deviceLayoutName = null;
                 controlPath = null;
 
-                for (int i = bindingIndex + 1; i < action.bindings.Count && action.bindings[i].isPartOfComposite; i++)
-                    strings.Add(GetBindingDisplayString(action, i, out deviceLayoutName, out controlPath));
+                for (
+                    int i = bindingIndex + 1;
+                    i < action.bindings.Count && action.bindings[i].isPartOfComposite;
+                    i++
+                )
+                    strings.Add(
+                        GetBindingDisplayString(action, i, out deviceLayoutName, out controlPath)
+                    );
 
                 return string.Join(' ', strings);
             }
 
-            string displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath);
+            string displayString = action.GetBindingDisplayString(
+                bindingIndex,
+                out deviceLayoutName,
+                out controlPath
+            );
             string iconText;
 
             // This will match for any latin character and digit so if you have a layout like AZERTY, it'll still show the correct keys
-            if (Chars.IsMatch(displayString)) {
+            if (Chars.IsMatch(displayString))
+            {
                 iconText = displayString;
 
                 goto end;
@@ -157,7 +178,8 @@ namespace Cookie.InputHelper
             // Fallback: will work for characters and numbers in non-latin layouts, as well as the F keys
             // (so something like 'Я' in russian will show a 'Z' icon, since its controlPath is still 'z')
             string upperPath = controlPath.ToUpper();
-            if (Chars.IsMatch(upperPath)) {
+            if (Chars.IsMatch(upperPath))
+            {
                 iconText = upperPath;
 
                 goto end;
@@ -172,13 +194,17 @@ namespace Cookie.InputHelper
         }
 
         // Credit to https://discussions.unity.com/t/list-of-all-inputcontrolpath/909946/5
-        public static void DumpControlPaths() {
-            var layouts = InputSystem.ListLayouts()
+        public static void DumpControlPaths()
+        {
+            var layouts = InputSystem
+                .ListLayouts()
                 .Select(InputSystem.LoadLayout)
                 .Where(l => l.isGenericTypeOfDevice);
-            foreach (InputControlLayout layout in layouts) {
+            foreach (InputControlLayout layout in layouts)
+            {
                 InputDevice device = InputSystem.AddDevice(layout.name);
-                foreach (InputControl control in device.allControls) {
+                foreach (InputControl control in device.allControls)
+                {
                     string relativePath = control.path.Substring(device.path.Length);
                     Debug.Log($"<{layout.name}>{relativePath}");
                 }
@@ -195,7 +221,8 @@ namespace Cookie.InputHelper
         ///     The saved key is "Binds__{mapName}{assetName (if any)}"
         /// </remarks>
         /// <seealso cref="LoadBinds(InputActionMap)" />
-        public static void SaveBinds(InputActionMap map) {
+        public static void SaveBinds(InputActionMap map)
+        {
             string binds = map.SaveBindingOverridesAsJson();
             PlayerPrefs.SetString(GetMapKey(map), binds);
         }
@@ -205,8 +232,10 @@ namespace Cookie.InputHelper
         /// </summary>
         /// <param name="asset">The asset to save</param>
         /// <seealso cref="SaveBinds(InputActionMap)" />
-        public static void SaveBinds(InputActionAsset asset) {
-            foreach (InputActionMap map in asset.actionMaps) SaveBinds(map);
+        public static void SaveBinds(InputActionAsset asset)
+        {
+            foreach (InputActionMap map in asset.actionMaps)
+                SaveBinds(map);
         }
 
         /// <summary>
@@ -217,10 +246,12 @@ namespace Cookie.InputHelper
         ///     The key is "Binds__{mapName}{assetName (if any)}"
         /// </remarks>
         /// <seealso cref="SaveBinds(InputActionMap)" />
-        public static void LoadBinds(InputActionMap map) {
+        public static void LoadBinds(InputActionMap map)
+        {
             string binds = PlayerPrefs.GetString(GetMapKey(map), null);
 
-            if (binds == null) return;
+            if (binds == null)
+                return;
 
             map.LoadBindingOverridesFromJson(binds);
         }
@@ -230,10 +261,13 @@ namespace Cookie.InputHelper
         /// </summary>
         /// <param name="asset">The asset to load</param>
         /// <seealso cref="LoadBinds(InputActionMap)" />
-        public static void LoadBinds(InputActionAsset asset) {
-            foreach (InputActionMap map in asset.actionMaps) LoadBinds(map);
+        public static void LoadBinds(InputActionAsset asset)
+        {
+            foreach (InputActionMap map in asset.actionMaps)
+                LoadBinds(map);
         }
 
-        private static string GetMapKey(InputActionMap map) => $"Binds__{map.name}{(map.asset ? map.asset.name : "")}";
+        private static string GetMapKey(InputActionMap map) =>
+            $"Binds__{map.name}{(map.asset ? map.asset.name : "")}";
     }
 }
