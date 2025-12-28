@@ -1,6 +1,6 @@
 {
 	"name": "com.cookie.input-helper",
-	"version": "0.3.3",
+	"version": "0.3.4",
 	"displayName": "Input Helper",
 	"description": "Some helpers for the new input system",
 	"unity": "6000.2",
